@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+    <title>Canvas</title>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="bar" id ="bar">
+            <div id="tool" class="tool">
+                <div id=eraser class="icon-eraser" ></div>
+                <div id=brush  class="icon-pencil3"></div>
+             </div>
+             <div class="pintersize" id="pintersize">
+                <ol>
+                    <li id="pintersize5"></li>
+                    <li id="pintersize10"></li>
+                    <li id="pintersize15"></li>
+                </ol>
+            </div>
+            <ol class="colorbar">    
+                    <li class="colorbox" id= "red" style="background:red"></li>
+                    <li class="colorbox" id= "blue" style="background:blue"></li>
+                    <li class="colorbox" id= "black" style="background:black"></li>
+                    <li class="colorbox" id= "yellow" style="background:yellow"></li>
+            </ol>
+            <div id="clear" class="clear icon-bin "></div>
+            <div id="download" class="download icon-download22 "></div>
+    </div>
+
+    
+    
+
+<script>
+var canvas = document.getElementById('canvas')
+var context = canvas.getContext('2d')
+var color = 'black'
+var pintersize = 2
+
+autoSetCanvasSize(canvas)
+
+if(document.body.ontouchstart !== undefined){
+    litenTotouch(canvas)
+}else{
+    litenToMouse(canvas)
+}
+
+
+
+download.onclick = function(){
+    var url = canvas.toDataURL("image/png")
+    var a = document.createElement('a')
+    document.body.appendChild(a)
+    a.href = url
+    a.download = "picture"
+    a.target = "_blank"
+    a.click()
+}
+
+clear.onclick = function(){
+    context.clearRect(0,0,2000,2000)
+}
+
+
+pintersize5.onclick = function(){
+    pintersize = 5
+    pintersize5.style= 'border:4px solid #fff'
+    pintersize10.style= 'border:none'
+    pintersize15.style= 'border:none'
+    }
+pintersize10.onclick = function(){
+    pintersize10.style= 'border:4px solid #fff'
+    pintersize5.style= 'border:none'
+    pintersize15.style= 'border:none'
+    pintersize = 10
+    }
+pintersize15.onclick = function(){
+    pintersize15.style= 'border:4px solid #fff'
+    pintersize5.style= 'border:none'
+    pintersize10.style= 'border:none'
+    pintersize = 15
+    }
+
+
+
+red.onclick = function(){
+    color = 'red'
+    }
+blue.onclick = function(){
+    color = 'blue'
+    }
+black.onclick = function(){
+    color = 'black'
+    }
+yellow.onclick = function(){
+    color = 'yellow'
+    }
+
+
+eraserEnabled = false
+eraser.onclick=function(){
+    eraserEnabled = true
+    tool.className = "tool active"
+}
+brush.onclick = function(){
+    eraserEnabled = false
+    tool.className = "tool"
+}
+
+
+
+
+
+function litenToMouse(canvas){
+    var using = false
+    var lastPoint = {
+        'x': undefined ,
+        'y': undefined
+    }
+    var newPoint = {
+        'x': undefined ,
+        'y': undefined
+    }
+    canvas.onmousedown = function (events){
+        var x = events.clientX
+        var y = events.clientY
+        using = true
+        lastPoint = {
+            'x': x ,
+            'y': y
+            }
+        if(eraserEnabled){
+            drawCirecle(x,y,pintersize/2,'#fff')
+        }else{
+
+            drawCirecle(x,y,pintersize/2,color)
+        }
+
+
+    }
+    canvas.onmousemove = function(events){
+        var x = events.clientX
+        var y = events.clientY
+        if (!using){return} 
+        newPoint = {
+                'x': x ,
+                'y': y
+            }
+        if(eraserEnabled){
+            drawCirecle(newPoint.x,newPoint.y,pintersize/2,'#fff')
+            drawline(lastPoint.x,lastPoint.y,newPoint.x,newPoint.y,'#fff')
+        }else{
+            drawCirecle(newPoint.x,newPoint.y,pintersize/2,color)
+            drawline(lastPoint.x,lastPoint.y,newPoint.x,newPoint.y,color)
+        }
+        lastPoint = newPoint
+    }
+    canvas.onmouseup = function(events){
+        using = false
+    }
+}
+
+
+
+
+function drawCirecle(x,y,radius,color){
+    context.beginPath()
+    context.fillStyle = color
+    context.arc(x,y,radius,0,Math.PI*2)
+    context.fill()
+}
+
+
+
+
+function drawline(x1,y1,x2,y2,color){
+    context.beginPath()
+    context.strokeStyle = color
+    context.moveTo(x1,y1) //begin
+    context.lineWidth = pintersize
+    context.lineTo(x2,y2)//end
+    context.stroke()
+    context.closePath()
+}
+
+
+
+
+
+
+function autoSetCanvasSize(canvas){
+    setCanvasSize()
+
+    window.onresize = function(){
+        setCanvasSize()
+    }
+    function setCanvasSize(){
+        var pageWidth = document.documentElement.clientWidth
+        var pageHeight = document.documentElement.clientHeight
+        
+        canvas.height = pageHeight
+        canvas.width = pageWidth
+    }
+}
+
+
+function litenTotouch(canvas){
+    var using = false
+    var lastPoint = {
+        'x': undefined ,
+        'y': undefined
+    }
+    var newPoint = {
+        'x': undefined ,
+        'y': undefined
+    }
+    canvas.ontouchstart = function (events){
+        var x = events.touches[0].clientX
+        var y = events.touches[0].clientY
+        using = true
+        lastPoint = {
+            'x': x ,
+            'y': y
+            }
+        if(eraserEnabled){
+            drawCirecle(x,y,pintersize/2,'#fff')
+        }else{
+
+            drawCirecle(x,y,pintersize/2,color)
+        }
+
+
+    }
+    canvas.ontouchmove = function(events){
+        var x = events.touches[0].clientX
+        var y = events.touches[0].clientY
+        if (!using){return} 
+        newPoint = {
+                'x': x ,
+                'y': y
+            }
+        if(eraserEnabled){
+            drawCirecle(newPoint.x,newPoint.y,pintersize/2,'#fff')
+            drawline(lastPoint.x,lastPoint.y,newPoint.x,newPoint.y,'#fff')
+        }else{
+            drawCirecle(newPoint.x,newPoint.y,pintersize/2,color)
+            drawline(lastPoint.x,lastPoint.y,newPoint.x,newPoint.y,color)
+        }
+        lastPoint = newPoint
+    }
+    canvas.ontouchend = function(events){
+        using = false
+    }
+}
+
+
+
+
+
+</script>
+</body>
+</html>

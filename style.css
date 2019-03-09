@@ -1,0 +1,88 @@
+*{
+    margin:0px;
+    padding:0px;
+}   
+ol{
+    list-style: none;
+}
+#canvas{
+    background: #fff;
+    display: block;
+}
+
+.bar{
+    position: fixed;
+    display: flex;
+    align-items: center;
+    top:0px;
+    background: #ccc;
+    width: 100%;
+    border-bottom: 1px solid black; 
+    flex-wrap: wrap;
+    padding: 10px;
+}
+.tool{
+    top:10px;
+    left: 10px;
+    font-size: 30px;
+    margin: 0px 15px;
+    cursor: pointer;
+
+}
+.tool > #brush{
+    display: none;
+}
+.tool.active > #brush{
+    display: block;
+}
+.tool.active > #eraser{
+    display: none;
+}
+.colorbar{
+    top:20px;
+    left: 60px;
+    cursor: pointer;
+    display: flex;
+    margin: 10px 0 ;
+}
+.colorbox{
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    margin: 0 15px;
+}
+.pintersize>ol{
+    display: flex;
+    color: #fff;
+    align-items: center;
+}
+.pintersize>ol>li{
+    background: #000;
+    margin: 0 20px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.pintersize>ol>li:nth-child(1){
+    height: 5px;
+    width:5px;
+}
+.pintersize>ol>li:nth-child(2){
+    height: 10px;
+    width:10px;
+}
+.pintersize>ol>li:nth-child(3){
+    height: 15px;
+    width:15px;
+}
+.download,
+.clear{
+    position:fixed;
+    right:10px;
+    top:10px;
+    font-size: 30px;
+    cursor: pointer;
+}
+.clear{
+    right:60px;
+    box-shadow: 0 0 0 0;
+}
